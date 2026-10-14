@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "blender": {
+      "command": "python",
+      "args": [
+        "-m",
+        "src.blender_mcp.server"
+      ],
+      "cwd": "y:\\MCP Blender Agent",
+      "env": {
+        "PYTHONPATH": "y:\\MCP Blender Agent\\src;y:\\MCP Blender Agent",
+        "BLENDER_HOST": "127.0.0.1",
+        "BLENDER_PORT": "9876"
+      }
+    }
+  }
+}
