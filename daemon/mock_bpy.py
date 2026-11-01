@@ -229,6 +229,7 @@ class MockObject:
         self.scale = Vector(scale)
         self.dimensions = Vector([2.0, 2.0, 2.0])
         self.parent: Optional[MockObject] = None
+        self.children: List[MockObject] = []
         self.matrix_world = Matrix()
         self.matrix_parent_inverse = Matrix()
         self.data = MockObjectData(obj_type, name)
