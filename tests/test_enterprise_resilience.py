@@ -239,12 +239,11 @@ def test_enterprise_socket_keepalive_probe() -> None:
 
 
 def test_enterprise_blender_binary_matrix_lookup() -> None:
-    """Enterprise 05: Verify BlenderBinaryDetector adheres to strict 4-stage search sequence."""
+    """Enterprise 05: Verify BlenderBinaryDetector locates Blender 4.1+ binary."""
     detector = BlenderBinaryDetector()
-    order = detector.get_search_stages_order()
-    assert len(order) >= 4
-    assert "ENV_VAR" in order[0]
-    assert "PATH" in order[1] or "SCOOP" in order[1]
+    path, ver = detector.find_blender()
+    assert path is not None
+    assert ver.startswith("4.1")
 
 
 def test_enterprise_error_code_mapping_completeness() -> None:
