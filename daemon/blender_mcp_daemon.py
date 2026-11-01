@@ -44,8 +44,12 @@ try:
     import bpy
     import mathutils
 except ImportError:
-    bpy = None  # type: ignore
-    mathutils = None  # type: ignore
+    try:
+        import mock_bpy as bpy
+        import mock_bpy as mathutils
+    except Exception:
+        bpy = None  # type: ignore
+        mathutils = None  # type: ignore
 
 
 class BlenderJSONEncoder(json.JSONEncoder):
