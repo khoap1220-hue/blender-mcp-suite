@@ -294,10 +294,10 @@ def test_enterprise_clean_resource_deallocation() -> None:
 
     client = BlenderSocketClient(host="127.0.0.1", port=port, command_timeout=3.0)
     client.connect()
-    assert client.is_connected()
+    assert client.is_connected
     client.send_command({"type": "ping"})
     client.disconnect()
-    assert not client.is_connected()
+    assert not client.is_connected
     assert client.sock is None
 
     del client
