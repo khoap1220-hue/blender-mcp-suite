@@ -319,6 +319,9 @@ class MockScene:
         self.collection = MockCollection("Scene Collection")
         self.camera: Optional[MockObject] = None
         self.world = MockWorld("World")
+        self.frame_current = 1
+        self.frame_start = 1
+        self.frame_end = 250
 
         class MockCycles:
             samples = 128
