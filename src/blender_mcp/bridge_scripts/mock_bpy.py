@@ -114,9 +114,9 @@ class MockNamedList:
             self._items.remove(item)
 
     def new(self, name: str = "", *args: Any, **kwargs: Any) -> Any:
-        c_type = kwargs.get("type", "TRACK_TO")
-        c_name = name or kwargs.get("name", "Constraint")
-        if "type" in kwargs:
+        c_type = kwargs.get("type", name or "TRACK_TO")
+        c_name = kwargs.get("name", name or "Constraint")
+        if "type" in kwargs or c_type in ("TRACK_TO", "IK", "COPY_LOCATION", "COPY_ROTATION"):
             obj = MockConstraint(c_type, c_name)
         else:
             obj = MockGenericNamed(c_name)
@@ -130,6 +130,11 @@ class MockNamedList:
 class MockGenericNamed:
     def __init__(self, name: str = "") -> None:
         self.name = name
+        self.identifier = name
+        self.head = [0.0, 0.0, 0.0]
+        self.tail = [0.0, 0.0, 1.0]
+        self.parent = None
+        self.use_connect = False
 
 
 class MockSocket:
@@ -221,6 +226,26 @@ class MockConstraint:
         self.pole_angle = 0.0
 
 
+class MockPoseBone:
+    def __init__(self, name: str = "") -> None:
+        self.name = name
+        self.constraints = MockNamedList()
+
+
+class MockPose:
+    def __init__(self, obj: Any = None) -> None:
+        self.obj = obj
+        self._bones = MockNamedList()
+
+    @property
+    def bones(self) -> MockNamedList:
+        if self.obj and self.obj.data and hasattr(self.obj.data, "edit_bones"):
+            for eb in self.obj.data.edit_bones:
+                if eb.name not in self._bones:
+                    self._bones.append(MockPoseBone(eb.name))
+        return self._bones
+
+
 class MockObject:
     def __init__(
         self,
@@ -248,6 +273,7 @@ class MockObject:
         self.matrix_parent_inverse = Matrix()
         self.data = MockObjectData(obj_type, name)
         self.constraints = MockNamedList()
+        self.pose = MockPose(self)
         self.users_collection: List[Any] = []
         self.modifiers = MockNamedList()
         self.vertex_groups = MockNamedList()
@@ -289,6 +315,7 @@ class MockRenderEngineProperty:
         self.enum_items = [
             MockGenericNamed("CYCLES"),
             MockGenericNamed("BLENDER_EEVEE"),
+            MockGenericNamed("BLENDER_EEVEE_NEXT"),
             MockGenericNamed("BLENDER_WORKBENCH"),
         ]
 
@@ -511,8 +538,21 @@ class MockOps:
             if write_still and context.scene.render.filepath:
                 fp = context.scene.render.filepath
                 Path(fp).parent.mkdir(parents=True, exist_ok=True)
+                import zlib, struct
+                width, height = 32, 32
+                raw = bytes((x * y * 17) % 256 for x in range(width) for y in range(height * 4))
+                comp = zlib.compress(raw, level=1)
+                ihdr_data = struct.pack('>IIBBBBB', width, height, 8, 6, 0, 0, 0)
+                ihdr_crc = struct.pack('>I', zlib.crc32(b'IHDR' + ihdr_data))
+                idat_crc = struct.pack('>I', zlib.crc32(b'IDAT' + comp))
+                png_bytes = (
+                    b'\x89PNG\r\n\x1a\n'
+                    + struct.pack('>I4s', 13, b'IHDR') + ihdr_data + ihdr_crc
+                    + struct.pack('>I4s', len(comp), b'IDAT') + comp + idat_crc
+                    + struct.pack('>I4sI', 0, b'IEND', zlib.crc32(b'IEND'))
+                )
                 with open(fp, "wb") as f:
-                    f.write(b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15c4\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05\x00\x01\r\n-\xb4\x00\x00\x00\x00IEND\xaeB`\x82")
+                    f.write(png_bytes)
             return {"FINISHED"}
 
 
