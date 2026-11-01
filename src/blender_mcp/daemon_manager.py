@@ -853,4 +853,3 @@ class DaemonManager:
             "blender_version": self.blender_version,
             "is_gui": self.is_gui_session,
         }
-```

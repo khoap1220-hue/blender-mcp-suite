@@ -367,4 +367,3 @@ class BlenderSocketClient:
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         self.disconnect()
-```
