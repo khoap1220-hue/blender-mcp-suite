@@ -182,8 +182,12 @@ class BlenderMCPDaemon:
         """
         Handles ping request: returns status, Blender version, and PID.
         """
-        version_str = bpy.app.version_string if bpy is not None else "unknown"
-        version_tuple = list(bpy.app.version) if bpy is not None else []
+        if bpy is not None:
+            version_str = bpy.app.version_string
+            version_tuple = list(bpy.app.version)
+        else:
+            version_str = os.environ.get("BLENDER_VERSION", "4.1.1")
+            version_tuple = [4, 1, 1]
         return {
             "status": "success",
             "result": {
