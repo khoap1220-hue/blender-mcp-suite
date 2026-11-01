@@ -186,6 +186,7 @@ class MockDOF:
 class MockObjectData:
     def __init__(self, obj_type: str = "MESH", name: str = "") -> None:
         self.name = name
+        self.type = obj_type
         self.materials: List[Any] = []
         self.edit_bones = MockNamedList()
         self.bones = MockNamedList()
