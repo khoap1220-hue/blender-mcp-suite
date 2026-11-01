@@ -30,10 +30,14 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from blender_mcp.socket_client import BlenderSocketClient, BlenderConnectionError
-from blender_mcp.daemon_manager import BlenderBinaryDetector, WindowsJobObject
+from blender_mcp.daemon_manager import (
+    BlenderBinaryDetector,
+    BlenderNotFoundError,
+    BlenderVersionError,
+    WindowsJobObject,
+)
 from blender_mcp.error_boundary import (
     BlenderMCPError,
-    BlenderNotFoundError,
     DaemonOfflineError,
     ObjectNotFoundError,
     TransformError,
