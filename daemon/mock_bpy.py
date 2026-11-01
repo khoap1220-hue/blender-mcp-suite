@@ -226,6 +226,26 @@ class MockConstraint:
         self.pole_angle = 0.0
 
 
+class MockPoseBone:
+    def __init__(self, name: str = "") -> None:
+        self.name = name
+        self.constraints = MockNamedList()
+
+
+class MockPose:
+    def __init__(self, obj: Any = None) -> None:
+        self.obj = obj
+        self._bones = MockNamedList()
+
+    @property
+    def bones(self) -> MockNamedList:
+        if self.obj and self.obj.data and hasattr(self.obj.data, "edit_bones"):
+            for eb in self.obj.data.edit_bones:
+                if eb.name not in self._bones:
+                    self._bones.append(MockPoseBone(eb.name))
+        return self._bones
+
+
 class MockObject:
     def __init__(
         self,
@@ -253,6 +273,7 @@ class MockObject:
         self.matrix_parent_inverse = Matrix()
         self.data = MockObjectData(obj_type, name)
         self.constraints = MockNamedList()
+        self.pose = MockPose(self)
         self.users_collection: List[Any] = []
         self.modifiers = MockNamedList()
         self.vertex_groups = MockNamedList()
@@ -294,6 +315,7 @@ class MockRenderEngineProperty:
         self.enum_items = [
             MockGenericNamed("CYCLES"),
             MockGenericNamed("BLENDER_EEVEE"),
+            MockGenericNamed("BLENDER_EEVEE_NEXT"),
             MockGenericNamed("BLENDER_WORKBENCH"),
         ]
 
