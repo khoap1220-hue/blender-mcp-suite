@@ -183,11 +183,19 @@ class MockDOF:
         self.aperture_fstop = 2.8
 
 
+class MockMaterialSlot:
+    def __init__(self, mat: Any = None) -> None:
+        self.material = mat
+
+
 class MockObjectData:
     def __init__(self, obj_type: str = "MESH", name: str = "") -> None:
         self.name = name
         self.type = obj_type
         self.materials: List[Any] = []
+        self.vertices: List[Any] = [Vector([0, 0, 0])] * 8
+        self.polygons: List[Any] = [1, 2, 3, 4, 5, 6]
+        self.edges: List[Any] = [1] * 12
         self.edit_bones = MockNamedList()
         self.bones = MockNamedList()
         self.energy = 1000.0
@@ -228,6 +236,12 @@ class MockObject:
         self.rotation_euler = Euler(rotation)
         self.scale = Vector(scale)
         self.dimensions = Vector([2.0, 2.0, 2.0])
+        self.bound_box = [
+            [-1.0, -1.0, -1.0], [1.0, -1.0, -1.0],
+            [1.0, 1.0, -1.0], [-1.0, 1.0, -1.0],
+            [-1.0, -1.0, 1.0], [1.0, -1.0, 1.0],
+            [1.0, 1.0, 1.0], [-1.0, 1.0, 1.0]
+        ]
         self.parent: Optional[MockObject] = None
         self.children: List[MockObject] = []
         self.matrix_world = Matrix()
@@ -237,6 +251,13 @@ class MockObject:
         self.users_collection: List[Any] = []
         self.modifiers = MockNamedList()
         self.vertex_groups = MockNamedList()
+        self._material_slots: List[MockMaterialSlot] = []
+
+    @property
+    def material_slots(self) -> List[MockMaterialSlot]:
+        if self.data and self.data.materials:
+            return [MockMaterialSlot(m) for m in self.data.materials]
+        return self._material_slots
 
     def select_set(self, val: bool) -> None:
         pass
