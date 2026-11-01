@@ -47,6 +47,8 @@ except ImportError:
     try:
         import mock_bpy as bpy
         import mock_bpy as mathutils
+        sys.modules["bpy"] = bpy
+        sys.modules["mathutils"] = mathutils
     except Exception:
         bpy = None  # type: ignore
         mathutils = None  # type: ignore
