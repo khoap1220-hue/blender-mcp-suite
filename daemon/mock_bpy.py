@@ -106,7 +106,12 @@ class MockNamedList:
             self._items.remove(item)
 
     def new(self, name: str = "", *args: Any, **kwargs: Any) -> Any:
-        obj = MockGenericNamed(name)
+        c_type = kwargs.get("type", "TRACK_TO")
+        c_name = name or kwargs.get("name", "Constraint")
+        if "type" in kwargs:
+            obj = MockConstraint(c_type, c_name)
+        else:
+            obj = MockGenericNamed(c_name)
         self._items.append(obj)
         return obj
 
@@ -323,18 +328,19 @@ class MockContext:
 
 
 class MockObjectsCollection(MockNamedList):
-    def new(self, name: str, data: Any = None) -> MockObject:
+    def new(self, name: str, object_data: Any = None, data: Any = None, **kw: Any) -> MockObject:
+        d = object_data if object_data is not None else data
         obj_type = "MESH"
-        if data and hasattr(data, "name"):
-            if "Light" in data.name or getattr(data, "energy", None) is not None:
+        if d and hasattr(d, "name"):
+            if "Light" in d.name or getattr(d, "energy", None) is not None:
                 obj_type = "LIGHT"
-            elif "Camera" in data.name or getattr(data, "lens", None) is not None:
+            elif "Camera" in d.name or getattr(d, "lens", None) is not None:
                 obj_type = "CAMERA"
-            elif "Armature" in data.name or getattr(data, "bones", None) is not None:
+            elif "Armature" in d.name or getattr(d, "bones", None) is not None:
                 obj_type = "ARMATURE"
         obj = MockObject(name=name, obj_type=obj_type)
-        if data:
-            obj.data = data
+        if d:
+            obj.data = d
         self.append(obj)
         return obj
 
