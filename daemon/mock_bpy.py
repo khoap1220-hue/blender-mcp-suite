@@ -114,9 +114,9 @@ class MockNamedList:
             self._items.remove(item)
 
     def new(self, name: str = "", *args: Any, **kwargs: Any) -> Any:
-        c_type = kwargs.get("type", "TRACK_TO")
-        c_name = name or kwargs.get("name", "Constraint")
-        if "type" in kwargs:
+        c_type = kwargs.get("type", name or "TRACK_TO")
+        c_name = kwargs.get("name", name or "Constraint")
+        if "type" in kwargs or c_type in ("TRACK_TO", "IK", "COPY_LOCATION", "COPY_ROTATION"):
             obj = MockConstraint(c_type, c_name)
         else:
             obj = MockGenericNamed(c_name)
@@ -130,6 +130,11 @@ class MockNamedList:
 class MockGenericNamed:
     def __init__(self, name: str = "") -> None:
         self.name = name
+        self.identifier = name
+        self.head = [0.0, 0.0, 0.0]
+        self.tail = [0.0, 0.0, 1.0]
+        self.parent = None
+        self.use_connect = False
 
 
 class MockSocket:
