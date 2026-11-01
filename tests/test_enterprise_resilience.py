@@ -78,7 +78,7 @@ def test_enterprise_idempotent_command_replay() -> None:
     t = threading.Thread(target=_echo_server, daemon=True)
     t.start()
 
-    client = BlenderSocketClient(host="127.0.0.1", port=port, timeout=3.0)
+    client = BlenderSocketClient(host="127.0.0.1", port=port, command_timeout=3.0)
     client.connect()
 
     results = []
@@ -118,7 +118,7 @@ def test_enterprise_extreme_payload_json_handling() -> None:
     t = threading.Thread(target=_deep_server, daemon=True)
     t.start()
 
-    client = BlenderSocketClient(host="127.0.0.1", port=port, timeout=5.0)
+    client = BlenderSocketClient(host="127.0.0.1", port=port, command_timeout=5.0)
     client.connect()
 
     deep_payload = {
@@ -176,7 +176,7 @@ def test_enterprise_multiprocess_socket_isolation() -> None:
     t.start()
 
     def _client_task(cid: int, outs: List[Any]):
-        c = BlenderSocketClient(host="127.0.0.1", port=port, timeout=3.0)
+        c = BlenderSocketClient(host="127.0.0.1", port=port, command_timeout=3.0)
         c.connect()
         r = c.send_command({"type": "ping", "client_id": cid})
         outs.append(r.get("result", {}).get("client_id"))
@@ -219,7 +219,7 @@ def test_enterprise_socket_keepalive_probe() -> None:
     t = threading.Thread(target=_keepalive_server, daemon=True)
     t.start()
 
-    client = BlenderSocketClient(host="127.0.0.1", port=port, timeout=3.0)
+    client = BlenderSocketClient(host="127.0.0.1", port=port, command_timeout=3.0)
     client.connect()
 
     t0 = time.perf_counter()
@@ -292,7 +292,7 @@ def test_enterprise_clean_resource_deallocation() -> None:
     t = threading.Thread(target=_quick_server, daemon=True)
     t.start()
 
-    client = BlenderSocketClient(host="127.0.0.1", port=port, timeout=3.0)
+    client = BlenderSocketClient(host="127.0.0.1", port=port, command_timeout=3.0)
     client.connect()
     assert client.is_connected()
     client.send_command({"type": "ping"})
