@@ -298,7 +298,7 @@ def test_enterprise_clean_resource_deallocation() -> None:
     client.send_command({"type": "ping"})
     client.disconnect()
     assert not client.is_connected
-    assert client.sock is None
+    assert client._sock is None
 
     del client
     gc.collect()
