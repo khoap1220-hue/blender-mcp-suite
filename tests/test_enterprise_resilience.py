@@ -38,18 +38,21 @@ from blender_mcp.daemon_manager import (
 )
 from blender_mcp.error_boundary import (
     BlenderMCPError,
-    DaemonOfflineError,
+    ParseError,
+    InvalidRequestError,
+    MethodNotFoundError,
+    InvalidParamsError,
+    InternalError,
+    BlenderDaemonError,
     ObjectNotFoundError,
-    TransformError,
     MaterialShaderError,
+    ArmatureRiggingError,
+    HierarchyCycleError,
     LightingCameraError,
     RenderEngineError,
-    ArmatureRiggingError,
-    SimulationCacheError,
-    PythonSyntaxError,
-    TimeoutExecutionError,
-    HierarchyCycleError,
-    ERROR_CODE_MAP,
+    ViewportCaptureError,
+    ScriptSyntaxError,
+    ERROR_CODE_NAMES,
 )
 
 
