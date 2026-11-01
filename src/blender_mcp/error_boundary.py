@@ -17,12 +17,7 @@ import traceback
 from typing import Any, Callable, Dict, List, Optional, Type, Union
 
 try:
-    try:
     from mcp.types import CallToolResult, ImageContent, TextContent
-except ImportError:
-    CallToolResult = Any  # type: ignore
-    ImageContent = Any  # type: ignore
-    TextContent = Any  # type: ignore
 except ImportError:
     CallToolResult = Any  # type: ignore
     ImageContent = Any  # type: ignore
