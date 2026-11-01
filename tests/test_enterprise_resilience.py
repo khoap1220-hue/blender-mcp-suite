@@ -252,21 +252,27 @@ def test_enterprise_blender_binary_matrix_lookup() -> None:
 def test_enterprise_error_code_mapping_completeness() -> None:
     """Enterprise 06: All defined enterprise error types map to RFC/JSON-RPC compliant error codes."""
     known_errors = [
+        ParseError,
+        InvalidRequestError,
+        MethodNotFoundError,
+        InvalidParamsError,
+        InternalError,
+        BlenderDaemonError,
         ObjectNotFoundError,
-        TransformError,
         MaterialShaderError,
+        ArmatureRiggingError,
+        HierarchyCycleError,
         LightingCameraError,
         RenderEngineError,
-        ArmatureRiggingError,
-        SimulationCacheError,
-        PythonSyntaxError,
-        TimeoutExecutionError,
-        HierarchyCycleError,
+        ViewportCaptureError,
+        ScriptSyntaxError,
     ]
     for err_cls in known_errors:
-        assert err_cls in ERROR_CODE_MAP or issubclass(err_cls, BlenderMCPError)
+        assert issubclass(err_cls, BlenderMCPError)
         inst = err_cls("test message")
-        assert inst.error_code < 0
+        assert inst.code < 0
+        assert inst.code in ERROR_CODE_NAMES
+        assert inst.to_dict()["isError"] is True
 
 
 def test_enterprise_clean_resource_deallocation() -> None:
