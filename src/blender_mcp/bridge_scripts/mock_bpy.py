@@ -101,6 +101,14 @@ class MockNamedList:
     def append(self, item: Any) -> None:
         self._items.append(item)
 
+    def link(self, item: Any) -> None:
+        if item not in self._items:
+            self._items.append(item)
+
+    def unlink(self, item: Any) -> None:
+        if item in self._items:
+            self._items.remove(item)
+
     def remove(self, item: Any, do_unlink: bool = True) -> None:
         if item in self._items:
             self._items.remove(item)
