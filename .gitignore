@@ -78,3 +78,4 @@ temp/
 # Local agent runtime state
 ecosystem_state.json
 ecosystem_state.json.*
+*.mcpb

@@ -400,3 +400,9 @@ y:\MCP Blender Agent\
 ├── ORIGINAL_REQUEST.md                # Original user requirements
 └── README.md                          # Comprehensive documentation (this document)
 ```
+
+---
+
+## Need a Custom Production MCP Server?
+
+Built by **Khoa Phan** ([khoaphan.dev/services](https://khoaphan.dev/services/?ref=gh-blender-mcp) • [0%-Fee Escrow on Contra ($145)](https://contra.com/s/Ll3krLoU-custom-mcp-server-for-claude-desktop-cursor-and-ai-agents)).

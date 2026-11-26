@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.khoap1220-hue/blender-mcp-suite",
+  "title": "Blender 4.1+ Zero-Zombie 3D MCP Suite",
+  "description": "21-tool Blender 4.1+ MCP server with Job Object zero-zombie containment and <210ms auto-reconnect.",
+  "version": "1.0.0",
+  "websiteUrl": "https://khoaphan.dev/services/?ref=mcp-registry-blender",
+  "repository": {
+    "url": "https://github.com/khoap1220-hue/blender-mcp-suite",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/khoap1220-hue/blender-mcp-suite/releases/download/v1.0.0/blender-mcp-suite.mcpb",
+      "fileSha256": "3349a39747a7cce3738b8d07c3485e2e2d4114118afb0ef06ff48e34b2fbcbcb",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
