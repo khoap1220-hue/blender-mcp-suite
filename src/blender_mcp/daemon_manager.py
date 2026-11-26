@@ -16,7 +16,16 @@ from __future__ import annotations
 import atexit
 import collections
 import ctypes
-from ctypes import wintypes
+import sys as _sys
+if _sys.platform == "win32":
+    from ctypes import wintypes
+else:
+    class _WinTypesShim:
+        DWORD = ctypes.c_uint32
+        HANDLE = ctypes.c_void_p
+        LPCWSTR = ctypes.c_wchar_p
+        BOOL = ctypes.c_int
+    wintypes = _WinTypesShim()  # type: ignore[assignment]
 import json
 import logging
 import os

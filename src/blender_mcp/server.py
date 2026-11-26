@@ -130,13 +130,14 @@ def main() -> None:
     logger.info("Starting Blender MCP Server on transport '%s' (targeting Blender on %s:%d)...", args.transport, args.host, args.port)
 
     # Pre-flight daemon check in background or on first tool call
-    try:
-        dm = get_active_daemon_manager(host=args.host, port=args.port)
-        dm.ensure_daemon_running()
-        get_active_client(host=args.host, port=args.port)
-        logger.info("Blender daemon ready and verified.")
-    except Exception as e:
-        logger.warning("Blender daemon pre-flight check deferred: %s", e)
+    if os.environ.get("BLENDER_SKIP_PREFLIGHT", "").strip().lower() not in ("1", "true", "yes"):
+        try:
+            dm = get_active_daemon_manager(host=args.host, port=args.port)
+            dm.ensure_daemon_running()
+            get_active_client(host=args.host, port=args.port)
+            logger.info("Blender daemon ready and verified.")
+        except Exception as e:
+            logger.warning("Blender daemon pre-flight check deferred: %s", e)
 
     # Run MCP server
     if args.transport == "stdio":
